@@ -216,7 +216,7 @@ class Table
 		$readonly = (array_key_exists('readonly',$options) && $options['readonly']) ? true : false;
 		$eager_load = array_key_exists('include',$options) ? $options['include'] : null;
 
-		return $this->find_by_sql($sql->to_s(),$sql->get_where_values(), $readonly, $eager_load);
+		return new QueryableSet($this->find_by_sql($sql->to_s(),$sql->get_where_values(), $readonly, $eager_load));
 	}
 
 	public function cache_key_for_model($pk)
