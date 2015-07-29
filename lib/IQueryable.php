@@ -2,7 +2,7 @@
 
 namespace FluentRepository;
 
-interface IQueryable
+interface IQueryable extends \Iterator
 {
 	function where($expression);
 	function order_by($expression);

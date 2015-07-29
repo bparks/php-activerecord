@@ -69,4 +69,32 @@ class QueryableSet implements \FluentRepository\IQueryable
 	{
 		return $this->_list;
 	}
+
+	//Iterator implementation
+	//Not thread-safe...
+	private $curIdx = 0;
+	
+	public function current ()
+	{
+		return $this->_list[$this->curIdx];
+	}
+
+	public function key ()
+	{
+		return $this->curIdx;
+	}
+
+	public function next ()
+	{
+		$this->curIdx++;
+	}
+
+	public function rewind ()
+	{
+		$this->curIdx = 0;
+	}
+	public function valid ()
+	{
+		return $this->curIdx < count($this->_list);
+	}
 }
