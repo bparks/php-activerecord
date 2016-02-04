@@ -1608,7 +1608,7 @@ class Model
 		$options['mapped_names'] = static::$alias_attribute;
 		$list = static::table()->find($options);
 
-		return $single ? (!empty($list) ? $list[0] : null) : $list;
+		return $single ? ($list->any() ? $list->first() : null) : $list;
 	}
 
 	/**
@@ -1662,7 +1662,7 @@ class Model
 			$options['conditions'] = static::pk_conditions($values);
 			$list = $table->find($options);
 		}
-		$results = count($list);
+		$results = count($list->to_array());
 
 		if ($results != ($expected = count($values)))
 		{
@@ -1677,7 +1677,7 @@ class Model
 
 			throw new RecordNotFound("Couldn't find all $class with IDs ($values) (found $results, but was looking for $expected)");
 		}
-		return $expected == 1 ? $list[0] : $list;
+		return $expected == 1 ? $list->first() : $list;
 	}
 
 	/**
