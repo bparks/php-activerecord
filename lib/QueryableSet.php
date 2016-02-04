@@ -2,7 +2,7 @@
 
 namespace ActiveRecord;
 
-class QueryableSet implements \FluentRepository\IQueryable
+class QueryableSet implements \ActiveRecord\IQueryable
 {
 	private /* array */ $_list;
 

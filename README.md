@@ -1,14 +1,23 @@
-# PHP ActiveRecord - Version 1.0 #
-
-[![Build Status](https://travis-ci.org/jpfuentes2/php-activerecord.png?branch=master)](https://travis-ci.org/jpfuentes2/php-activerecord)
+# Pails ActiveRecord - Version 1.0 #
 
 by 
+
+# [@bparks](https://github.com/bparks) - Brian Parks
+
+based on PHPActiveRecord, a project by
 
 * [@kla](https://github.com/kla) - Kien La
 * [@jpfuentes2](https://github.com/jpfuentes2) - Jacques Fuentes
 * [And these terrific Contributors](https://github.com/kla/php-activerecord/contributors)
 
 <http://www.phpactiverecord.org/> 
+
+This fork is intended to be 100% API-compatible with the PHP ActiveRecord project except
+where necessary to improve performance, self-consistency within the API, or to add new
+features that do not exist in PHP ActiveRecord.
+
+Steps will be taken to find and include any and all pull requests that help further these
+goals.
 
 ## Introduction ##
 A brief summarization of what ActiveRecord is:

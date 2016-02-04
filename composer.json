@@ -1,9 +1,9 @@
 {
-    "name": "php-activerecord/php-activerecord",
+    "name": "pails/activerecord",
     "type": "library",
-    "description": "php-activerecord is an open source ORM library based on the ActiveRecord pattern.",
+    "description": "pails-activerecord is an open source ORM library based on the ActiveRecord pattern and php-activerecord.",
     "keywords": ["activerecord", "orm"],
-    "homepage": "http://www.phpactiverecord.org/",
+    "homepage": "https://github.com/bparks/pails-activerecord",
     "license": "MIT",
     "require": {
         "php": ">=5.3.0"
