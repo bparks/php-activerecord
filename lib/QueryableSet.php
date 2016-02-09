@@ -6,6 +6,7 @@ class QueryableSet implements \ActiveRecord\IQueryable
 {
 	private /* array */ $_list;
 
+
 	function __construct ($list)
 	{
 		$this->_list = $list;
@@ -65,8 +66,36 @@ class QueryableSet implements \ActiveRecord\IQueryable
 			return count($this->_list) > 0 ? $this->_list[0] : null;
 	}
 
+	function count ()
+	{
+		return count($this->_list);
+	}
+
 	function to_array ()
 	{
 		return $this->_list;
 	}
+
+	// Traversable
+	private $position = 0;
+
+	function rewind() {
+        $this->position = 0;
+    }
+
+    function current() {
+        return $this->_list[$this->position];
+    }
+
+    function key() {
+        return $this->position;
+    }
+
+    function next() {
+        ++$this->position;
+    }
+
+    function valid() {
+        return isset($this->_list[$this->position]);
+    }
 }

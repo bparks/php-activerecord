@@ -2,7 +2,7 @@
 
 namespace ActiveRecord;
 
-interface IQueryable
+interface IQueryable extends \Traversable
 {
 	function where($expression);
 	function order_by($expression);
@@ -12,5 +12,6 @@ interface IQueryable
 	function select($expr);
 	function any($expr = null);
 	function first($expr = null);
+	function count();
 	function to_array();
 }
