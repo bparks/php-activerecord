@@ -2,7 +2,7 @@
 
 namespace ActiveRecord;
 
-interface IQueryable extends \Traversable
+interface IQueryable extends \Iterator
 {
 	function where($expression);
 	function order_by($expression);
