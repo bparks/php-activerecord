@@ -23,14 +23,14 @@ class QueryableSet implements \ActiveRecord\IQueryable
 
 	function order_by ($expr)
 	{
-		$new_list = clone $this->_list;
+		$new_list = $this->_list;
 		usort($new_list, $expr);
 		return new QueryableSet($new_list);
 	}
 
 	function order_by_descending ($expr)
 	{
-		$new_list = clone $this->_list;
+		$new_list = $this->_list;
 		usort($new_list, $expr);
 		return new QueryableSet(array_reverse($new_list));
 	}
