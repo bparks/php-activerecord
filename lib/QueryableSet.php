@@ -24,15 +24,27 @@ class QueryableSet implements \ActiveRecord\IQueryable
 	function order_by ($expr)
 	{
 		$new_list = $this->_list;
-		usort($new_list, $expr);
+		usort($new_list, function ($a, $b) use ($expr) {
+            $va = $expr($a);
+            $vb = $expr($b);
+            if ($va == $vb) return 0;
+            if ($va > $vb) return 1;
+            return -1;
+        });
 		return new QueryableSet($new_list);
 	}
 
 	function order_by_descending ($expr)
 	{
 		$new_list = $this->_list;
-		usort($new_list, $expr);
-		return new QueryableSet(array_reverse($new_list));
+		usort($new_list, function ($a, $b) use ($expr) {
+            $va = $expr($a);
+            $vb = $expr($b);
+            if ($va == $vb) return 0;
+            if ($va > $vb) return -1;
+            return 1;
+        });
+		return new QueryableSet($new_list);
 	}
 
 	function skip ($count)
