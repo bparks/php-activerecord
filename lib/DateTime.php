@@ -136,7 +136,7 @@ class DateTime extends \DateTime
 		call_user_func_array(array($this,'parent::setISODate'),func_get_args());
 	}
 
-	public function setTime($hour, $minute, $second=null)
+	public function setTime($hour, $minute, $second = 0, $microseconds = 0)
 	{
 		$this->flag_dirty();
 		call_user_func_array(array($this,'parent::setTime'),func_get_args());
