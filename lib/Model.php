@@ -71,7 +71,7 @@ namespace ActiveRecord;
  * @see Serialization
  * @see Validations
  */
-class Model
+class Model implements \JsonSerializable
 {
 	/**
 	 * An instance of {@link Errors} and will be instantiated once a write method is called.
@@ -425,8 +425,9 @@ class Model
 
 		foreach (static::$delegate as &$item)
 		{
-			if (($delegated_name = $this->is_delegated($name,$item)))
-				return $this->$item['to']->$delegated_name = $value;
+			if (($delegated_name = $this->is_delegated($name,$item))) {
+				return $this->{$item['to']}->$delegated_name = $value;
+			}
 		}
 
 		throw new UndefinedPropertyException(get_called_class(),$name);
@@ -1867,6 +1868,15 @@ class Model
 		$class = "ActiveRecord\\{$type}Serializer";
 		$serializer = new $class($this, $options);
 		return $serializer->to_s();
+	}
+	
+	/**
+	 * Serializes the object to a value that can be serialized natively by json_encode().
+	 * 
+	 * This is the implementation for the \JsonSerializable interface
+	 */
+	public function jsonSerialize() {
+		return $this->to_array();
 	}
 
 	/**

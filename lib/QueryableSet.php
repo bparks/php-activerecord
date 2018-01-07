@@ -78,6 +78,7 @@ class QueryableSet implements \ActiveRecord\IQueryable
 			return count($this->_list) > 0 ? $this->_list[0] : null;
 	}
 
+	// Countable
 	function count ()
 	{
 		return count($this->_list);
@@ -109,5 +110,26 @@ class QueryableSet implements \ActiveRecord\IQueryable
 
     function valid() {
         return isset($this->_list[$this->position]);
+	}
+
+	// ArrayAccess
+	public function offsetSet($offset, $value) {
+        if (is_null($offset)) {
+            $this->_list[] = $value;
+        } else {
+            $this->_list[$offset] = $value;
+        }
     }
+
+    public function offsetExists($offset) {
+        return isset($this->_list[$offset]);
+    }
+
+    public function offsetUnset($offset) {
+        unset($this->_list[$offset]);
+    }
+
+    public function offsetGet($offset) {
+        return isset($this->_list[$offset]) ? $this->_list[$offset] : null;
+	}
 }

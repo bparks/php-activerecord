@@ -126,7 +126,7 @@ class ActiveRecordFindTest extends DatabaseTest
 	public function test_find_all_no_results()
 	{
 		$authors = Author::find('all',array('conditions' => array('author_id IN(11111111111,22222222222,333333333333)')));
-		$this->assert_equals(array(),$authors);
+		$this->assert_equals(false,$authors->any());
 	}
 
 	public function test_find_first()

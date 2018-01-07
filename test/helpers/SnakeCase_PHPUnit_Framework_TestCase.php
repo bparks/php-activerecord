@@ -10,7 +10,9 @@ class SnakeCase_PHPUnit_Framework_TestCase extends PHPUnit_Framework_TestCase
 
 		$class_name = get_called_class();
 		$trace = debug_backtrace();
-		die("PHP Fatal Error:  Call to undefined method $class_name::$meth() in {$trace[1]['file']} on line {$trace[1]['line']}" . PHP_EOL);
+		$file = isset($trace[1]['file']) ? $trace[1]['file'] : '[unknown]';
+		$line = isset($trace[1]['line']) ? $trace[1]['line'] : '[unknown]';
+		die("PHP Fatal Error:  Call to undefined method $class_name::$meth() in $file on line $line" . PHP_EOL);
 	}
 
 	public function setUp()

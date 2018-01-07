@@ -177,7 +177,7 @@ abstract class Serialization
 					{
 						$this->attributes[$association] = null;
 					}
-					elseif (!is_array($assoc))
+					elseif (!is_array($assoc) && !is_a($assoc, '\\ActiveRecord\\QueryableSet'))
 					{
 						$serialized = new $serializer_class($assoc, $options);
 						$this->attributes[$association] = $serialized->to_a();;

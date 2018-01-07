@@ -2,7 +2,7 @@
 
 namespace ActiveRecord;
 
-interface IQueryable extends \Iterator
+interface IQueryable extends \Iterator, \ArrayAccess, \Countable
 {
 	function where($expression);
 	function order_by($expression);
