@@ -173,7 +173,8 @@ class Utils
 		return is_array(end($options)) ? end($options) : array();
 	}
 
-	public static function add_condition(&$conditions=array(), $condition, $conjuction='AND')
+    // TODO: Is 1=1 really reasonable here?
+	public static function add_condition(&$conditions=array(), $condition='', $conjuction='AND')
 	{
 		if (is_array($condition))
 		{
