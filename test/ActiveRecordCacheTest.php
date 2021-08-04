@@ -23,13 +23,13 @@ class ActiveRecordCacheTest extends DatabaseTest
 
 	public function test_default_expire()
 	{
-		$this->assert_equals(30,Cache::$options['expire']);
+		$this->assertEquals(30,Cache::$options['expire']);
 	}
 
 	public function test_explicit_default_expire()
 	{
 		ActiveRecord\Config::instance()->set_cache('memcache://localhost',array('expire' => 1));
-		$this->assert_equals(1,Cache::$options['expire']);
+		$this->assertEquals(1,Cache::$options['expire']);
 	}
 
 	public function test_caches_column_meta_data()
@@ -38,7 +38,7 @@ class ActiveRecordCacheTest extends DatabaseTest
 
 		$table_name = Author::table()->get_fully_qualified_table_name(!($this->conn instanceof ActiveRecord\PgsqlAdapter));
 		$value = Cache::$adapter->read("get_meta_data-$table_name");
-		$this->assert_true(is_array($value));
+		$this->assertTrue(is_array($value));
 	}
 }
 ?>

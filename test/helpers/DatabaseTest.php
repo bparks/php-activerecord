@@ -1,34 +1,41 @@
 <?php
 require_once __DIR__ . '/DatabaseLoader.php';
 
-class DatabaseTest extends SnakeCase_PHPUnit_Framework_TestCase
+class DatabaseTest extends PHPUnit\Framework\TestCase
 {
 	protected $conn;
+	protected $connection_name;
+
 	public static $log = false;
 	public static $db;
 
-	public function set_up($connection_name=null)
+	public function __construct($connection_name = null)
+	{
+		$this->connection_name = $connection_name;
+	}
+
+	public function setUp(): void
 	{
 		ActiveRecord\Table::clear_cache();
 
 		$config = ActiveRecord\Config::instance();
 		$this->original_default_connection = $config->get_default_connection();
 
-		if ($connection_name)
-			$config->set_default_connection($connection_name);
+		if ($this->connection_name)
+			$config->set_default_connection($this->connection_name);
 
-		if ($connection_name == 'sqlite' || $config->get_default_connection() == 'sqlite')
+		if ($this->connection_name == 'sqlite' || $config->get_default_connection() == 'sqlite')
 		{
 			// need to create the db. the adapter specifically does not create it for us.
 			static::$db = substr(ActiveRecord\Config::instance()->get_connection('sqlite'),9);
 			new SQLite3(static::$db);
 		}
 
-		$this->connection_name = $connection_name;
+		$connection_name = $this->connection_name;
 		try {
-			$this->conn = ActiveRecord\ConnectionManager::get_connection($connection_name);
+			$this->conn = ActiveRecord\ConnectionManager::get_connection($this->connection_name);
 		} catch (ActiveRecord\DatabaseException $e) {
-			$this->mark_test_skipped($connection_name . ' failed to connect. '.$e->getMessage());
+			$this->markTestSkipped($this->connection_name . ' failed to connect. '.$e->getMessage());
 		}
 
 		$GLOBALS['ACTIVERECORD_LOG'] = false;
@@ -40,7 +47,7 @@ class DatabaseTest extends SnakeCase_PHPUnit_Framework_TestCase
 			$GLOBALS['ACTIVERECORD_LOG'] = true;
 	}
 
-	public function tear_down()
+	public function tearDown(): void
 	{
 		if ($this->original_default_connection)
 			ActiveRecord\Config::instance()->set_default_connection($this->original_default_connection);

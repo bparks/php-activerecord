@@ -1,9 +1,9 @@
 <?php
 use ActiveRecord\Cache;
 
-class CacheTest extends SnakeCase_PHPUnit_Framework_TestCase
+class CacheTest extends PHPUnit\Framework\TestCase
 {
-	public function set_up()
+	public function setUp(): void
 	{
 		if (!extension_loaded('memcache'))
 		{
@@ -14,7 +14,7 @@ class CacheTest extends SnakeCase_PHPUnit_Framework_TestCase
 		Cache::initialize('memcache://localhost');
 	}
 
-	public function tear_down()
+	public function tearDown(): void
 	{
 		Cache::flush();
 	}
@@ -37,13 +37,13 @@ class CacheTest extends SnakeCase_PHPUnit_Framework_TestCase
 
 	public function test_get_returns_the_value()
 	{
-		$this->assert_equals("abcd", $this->cache_get());
+		$this->assertEquals("abcd", $this->cache_get());
 	}
 
 	public function test_get_writes_to_the_cache()
 	{
 		$this->cache_get();
-		$this->assert_equals("abcd", Cache::$adapter->read("1337"));
+		$this->assertEquals("abcd", Cache::$adapter->read("1337"));
 	}
 
 	public function test_get_does_not_execute_closure_on_cache_hit()
@@ -60,7 +60,7 @@ class CacheTest extends SnakeCase_PHPUnit_Framework_TestCase
 	public function test_get_works_without_caching_enabled()
 	{
 		Cache::$adapter = null;
-		$this->assert_equals("abcd", $this->cache_get());
+		$this->assertEquals("abcd", $this->cache_get());
 	}
 
 	public function test_cache_expire()

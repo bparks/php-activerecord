@@ -34,13 +34,13 @@ class ValidatesNumericalityOfTest extends DatabaseTest
 
 		if ($boolean == 'valid')
 		{
-			$this->assert_true($book->save());
-			$this->assert_false($book->errors->is_invalid('numeric_test'));
+			$this->assertTrue($book->save());
+			$this->assertFalse($book->errors->is_invalid('numeric_test'));
 		}
 		else
 		{
-			$this->assert_false($book->save());
-			$this->assert_true($book->errors->is_invalid('numeric_test'));
+			$this->assertFalse($book->save());
+			$this->assertTrue($book->errors->is_invalid('numeric_test'));
 
 			if (!is_null($msg))
 				$this->assert_same($msg, $book->errors->on('numeric_test'));
@@ -156,7 +156,7 @@ class ValidatesNumericalityOfTest extends DatabaseTest
 		);
 		$book = new BookNumericality(array('numeric_test' => 'NaN'));
 		$book->is_valid();
-		$this->assert_equals(array('Numeric test Hello'),$book->errors->full_messages());
+		$this->assertEquals(array('Numeric test Hello'),$book->errors->full_messages());
 	}
 };
 
