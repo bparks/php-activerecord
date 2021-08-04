@@ -53,4 +53,20 @@ class PredicateTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($params[2] instanceof ActiveRecord\Parameter);
         $this->assertEquals($params[2]->value(), 2);
     }
+
+    public function test_cleaner_way_of_writing_compound_predicate()
+    {
+        $params = [];
+        $predicate = Q::equals('col_name', Q::param('bob'))->and(Q::equals('col2', Q::param(1))->or(Q::equals('col3', Q::param(2))));
+        $actual = $predicate->toAnsiSql($params);
+
+        $this->assertEquals($actual, "col_name = ? and (col2 = ? or col3 = ?)");
+        $this->assertEquals(count($params), 3);
+        $this->assertTrue($params[0] instanceof ActiveRecord\Parameter);
+        $this->assertEquals($params[0]->value(), 'bob');
+        $this->assertTrue($params[1] instanceof ActiveRecord\Parameter);
+        $this->assertEquals($params[1]->value(), 1);
+        $this->assertTrue($params[2] instanceof ActiveRecord\Parameter);
+        $this->assertEquals($params[2]->value(), 2);
+    }
 }

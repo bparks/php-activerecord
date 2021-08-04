@@ -54,6 +54,16 @@ class Predicate
 
         throw new ActiveRecordException("Unkown operator '$operator'");
     }
+
+    public function __call($method, $args)
+    {
+        if (!method_exists(Q::class, $method))
+            throw new Exception("Unknown predicate operator '$method'");
+
+        array_unshift($args, $this);
+        
+        return call_user_func_array("\ActiveRecord\Q::$method", $args);
+    }
 }
 
 class Parameter
