@@ -37,6 +37,7 @@ class Query
     public function toOptions()
     {
         if ($this->where) {
+            $params = [];
             $sql = $this->where->toAnsiSql($params);
             $values = array_map(fn ($param) => $param->value(), $params);
             array_unshift($values, $sql);
