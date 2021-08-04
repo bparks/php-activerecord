@@ -31,7 +31,10 @@ class Predicate
         }
         else if ($value instanceof Predicate)
         {
-            return $value->toAnsiSql($params);
+            $subexpr = $value->toAnsiSql($params);
+            if (($this->op == 'and' || $this->op == 'or') && ($value->op == 'and' || $value->op == 'or'))
+                return "($subexpr)";
+            return $subexpr;
         }
         else
         {
