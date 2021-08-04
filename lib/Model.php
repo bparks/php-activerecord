@@ -1786,6 +1786,17 @@ class Model implements \JsonSerializable
 	}
 
 	/**
+	 * [BETA] Builds a query with the provided predicates, but doesn't run it
+	 * 
+	 * @param Predicate $predicate The predicate to use when actually querying
+	 * @return Query the query that will be run
+	 */
+	public static function where(Predicate $predicate)
+	{
+		return new Query(static::table(), $predicate);
+	}
+
+	/**
 	 * Returns a JSON representation of this model.
 	 *
 	 * @see Serialization
