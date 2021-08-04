@@ -15,7 +15,7 @@ class Predicate
     public function toAnsiSql(&$params)
     {
         $retval = $this->toAnsiOperand($this->left, $params).' '.$this->toAnsiOperator($this->op);
-        if ($this->op != 'null')
+        if ($this->op != 'null' && $this->op != 'notnull')
             $retval .= ' '.$this->toAnsiOperand($this->right, $params);
         if ($this->op == 'between')
             $retval .= ' and '.$this->toAnsiOperand($this->addtl, $params);
@@ -28,6 +28,10 @@ class Predicate
         {
             $params[] = $value;
             return "?";
+        }
+        else if ($value instanceof Predicate)
+        {
+            return $value->toAnsiSql($params);
         }
         else
         {
@@ -42,6 +46,8 @@ class Predicate
         
         if ($operator == 'null')
             return 'is null';
+        if ($operator == 'notnull')
+            return 'is not null';
 
         throw new ActiveRecordException("Unkown operator '$operator'");
     }
@@ -52,6 +58,11 @@ class Parameter
     public function __construct($value)
     {
         $this->value = $value;
+    }
+
+    public function value()
+    {
+        return $this->value;
     }
 }
 
@@ -95,6 +106,11 @@ class Q
     static function isNull($x): Predicate
     {
         return new Predicate($x, 'null');
+    }
+
+    static function isNotNull($x): Predicate
+    {
+        return new Predicate($x, 'notnull');
     }
 
     static function and($x, $y): Predicate

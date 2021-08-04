@@ -22,4 +22,19 @@ class PredicateTest extends PHPUnit\Framework\TestCase
         $params = [];
         $this->assertEquals(Q::isNull('col_name')->toAnsiSql($params), "col_name is null");
     }
+
+    public function test_string_parameter()
+    {
+        $params = [];
+        $this->assertEquals(Q::equals('col_name', Q::param('bob'))->toAnsiSql($params), "col_name = ?");
+        $this->assertEquals(count($params), 1);
+        $this->assertTrue($params[0] instanceof ActiveRecord\Parameter);
+        $this->assertEquals($params[0]->value(), 'bob');
+    }
+
+    public function test_compound_predicate()
+    {
+        $params = [];
+        $this->assertEquals(Q::and(Q::equals(1, 1), Q::isNotNull(1))->toAnsiSql($params), "1 = 1 and 1 is not null");
+    }
 }
