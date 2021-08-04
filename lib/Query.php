@@ -10,14 +10,21 @@ class Query
         $this->where = $predicate;
     }
 
+    public function toOptions()
+    {
+        if ($this->where) {
+            $sql = $this->where->toAnsiSql($params);
+            $values = array_map(fn ($param) => $param->value(), $params);
+            array_unshift($values, $sql);
+            $options['conditions'] = $values;
+        }
+
+        return $options;
+    }
+
     public function execute()
     {
-        $params = [];
-        $sql = 'select * from '.$this->table->get_fully_qualified_table_name();
-
-        if ($this->where)
-            $sql .= 'where '.$this->where->toAnsiSql($params);
-        
-        return $this->table->find_by_sql($sql, array_map(fn ($param) => $param->value(), $params));
+        $options = $this->toOptions();
+        return $this->table->find($options);
     }
 }
