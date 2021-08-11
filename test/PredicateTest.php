@@ -23,6 +23,19 @@ class PredicateTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(Q::isNull('col_name')->toAnsiSql($params), "col_name is null");
     }
 
+    public function test_in()
+    {
+        $params = [];
+        $this->assertEquals(Q::in('col_name', ['a', 'b'])->toAnsiSql($params), "col_name in (a, b)");
+    }
+
+    public function test_in_params()
+    {
+        $params = [];
+        $this->assertEquals(Q::in('col_name', [Q::param('a'), Q::param('b')])->toAnsiSql($params), "col_name in (?, ?)");
+        $this->assertEquals(2, count($params));
+    }
+
     public function test_string_parameter()
     {
         $params = [];

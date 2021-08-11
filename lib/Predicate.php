@@ -36,6 +36,12 @@ class Predicate
                 return "($subexpr)";
             return $subexpr;
         }
+        else if (is_array($value))
+        {
+            return '('.implode(', ', array_map(function ($x) use (&$params) {
+                return $this->toAnsiOperand($x, $params);
+            }, $value)).')';
+        }
         else
         {
             return $value;
@@ -44,7 +50,7 @@ class Predicate
 
     private function toAnsiOperator($operator)
     {
-        if (in_array($operator, ['=', '!=', '>', '>=', '<', '<=', 'between', 'and', 'or']))
+        if (in_array($operator, ['=', '!=', '>', '>=', '<', '<=', 'between', 'and', 'or', 'in']))
             return $operator;
         
         if ($operator == 'null')
@@ -134,6 +140,11 @@ class Q
     static function or($x, $y): Predicate
     {
         return new Predicate($x, 'or', $y);
+    }
+
+    static function in($x, array $y): Predicate
+    {
+        return new Predicate($x, 'in', $y);
     }
 
     static function param($value): Parameter
