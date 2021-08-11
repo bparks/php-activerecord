@@ -36,6 +36,10 @@ class Predicate
                 return "($subexpr)";
             return $subexpr;
         }
+        else if ($value instanceof Aggregate)
+        {
+            return $value->toAnsiSql($params);
+        }
         else if (is_array($value))
         {
             return '('.implode(', ', array_map(function ($x) use (&$params) {
@@ -50,7 +54,7 @@ class Predicate
 
     private function toAnsiOperator($operator)
     {
-        if (in_array($operator, ['=', '!=', '>', '>=', '<', '<=', 'between', 'and', 'or', 'in']))
+        if (in_array($operator, ['=', '!=', '>', '>=', '<', '<=', 'between', 'and', 'or', 'in', 'like']))
             return $operator;
         
         if ($operator == 'null')
@@ -82,6 +86,42 @@ class Parameter
     public function value()
     {
         return $this->value;
+    }
+}
+
+class Aggregate
+{
+    public function __construct(string $function, ...$values)
+    {
+        $this->function = $function;
+        $this->values = $values;
+    }
+
+    public function toAnsiOperand($value, &$params)
+    {
+        if ($value instanceof Parameter)
+        {
+            $params[] = $value;
+            return "?";
+        }
+        else if ($value == '%')
+        {
+            return "'%'";
+        }
+        else
+        {
+            return $value;
+        }
+    }
+
+    public function toAnsiSql(&$params)
+    {
+        if ($this->function == 'concat')
+            return 'concat('.implode(', ', array_map(function ($x) use (&$params) {
+                return $this->toAnsiOperand($x, $params);
+            }, $this->values)).')';
+        
+        throw new ActiveRecordException("Unkown aggregate '$this->function'");
     }
 }
 
@@ -147,8 +187,18 @@ class Q
         return new Predicate($x, 'in', $y);
     }
 
+    static function like($x, $y): Predicate
+    {
+        return new Predicate($x, 'like', Q::concat('%', $y, '%'));
+    }
+
     static function param($value): Parameter
     {
         return new Parameter($value);
+    }
+
+    static function concat(...$values): Aggregate
+    {
+        return new Aggregate('concat', ...$values);
     }
 }

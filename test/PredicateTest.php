@@ -36,6 +36,19 @@ class PredicateTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(2, count($params));
     }
 
+    public function test_like()
+    {
+        $params = [];
+        $this->assertEquals(Q::like('col_name', 'other_name')->toAnsiSql($params), "col_name like concat('%', other_name, '%')");
+    }
+
+    public function test_like_param()
+    {
+        $params = [];
+        $this->assertEquals(Q::like('col_name', Q::param('other_name'))->toAnsiSql($params), "col_name like concat('%', ?, '%')");
+        $this->assertEquals(1, count($params));
+    }
+
     public function test_string_parameter()
     {
         $params = [];
