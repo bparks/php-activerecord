@@ -87,7 +87,7 @@ class Table
 	{
 		$this->class = Reflections::instance()->add($class_name)->get($class_name);
 
-		$this->reestablish_connection(false);
+		//$this->reestablish_connection(false);
 		$this->set_table_name();
 		$this->get_meta_data();
 		$this->set_primary_key();

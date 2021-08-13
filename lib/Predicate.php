@@ -76,6 +76,32 @@ class Predicate
     }
 }
 
+class JoinPredicate
+{
+    public function __construct($operator, $relationship, $predicate)
+    {
+        $this->operator = $operator;
+        $this->relationship = $relationship;
+        $this->predicate = $predicate;
+    }
+
+    public function toAnsiSql(&$params, Table $table)
+    {
+        $rel = $table->get_relationship($this->relationship);
+        $join_table = $rel->get_table();
+
+        $from_table_name = $table->get_fully_qualified_table_name();
+        $join_table_name = $join_table->get_fully_qualified_table_name();
+        $foreign_key = $rel->foreign_key[0];
+        $primary_key = $rel->primary_key[0];
+
+        $sql = "exists (select 1 from $join_table_name where $from_table_name.$foreign_key = $join_table_name.$primary_key";
+        if ($this->predicate)
+            $sql .= ' and ('.$this->predicate->toAnsiSql($params).')';
+        return $sql.')';
+    }
+}
+
 class Parameter
 {
     public function __construct($value)
@@ -200,5 +226,15 @@ class Q
     static function concat(...$values): Aggregate
     {
         return new Aggregate('concat', ...$values);
+    }
+
+    static function exists($relationship, Predicate $predicate): JoinPredicate
+    {
+        return new JoinPredicate('exists', $relationship, $predicate);
+    }
+
+    static function notExists($relationship, Predicate $predicate): JoinPredicate
+    {
+        return new JoinPredicate('exists', $relationship, $predicate);
     }
 }
