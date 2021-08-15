@@ -92,8 +92,8 @@ class JoinPredicate
 
         $from_table_name = $table->get_fully_qualified_table_name();
         $join_table_name = $join_table->get_fully_qualified_table_name();
-        $foreign_key = $rel->foreign_key[0];
-        $primary_key = $rel->primary_key[0];
+        $foreign_key = Inflector::instance()->keyify($table->class->getName());
+        $primary_key = $table->pk[0];
 
         $sql = "exists (select 1 from $join_table_name where $from_table_name.$foreign_key = $join_table_name.$primary_key";
         if ($this->predicate)

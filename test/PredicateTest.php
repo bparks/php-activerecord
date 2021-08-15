@@ -96,20 +96,4 @@ class PredicateTest extends PHPUnit\Framework\TestCase
         $this->assertTrue($params[2] instanceof ActiveRecord\Parameter);
         $this->assertEquals($params[2]->value(), 2);
     }
-
-    public function test_exists()
-    {
-        $params = [];
-        $table = new Table('SampleModel');
-        $predicate = Q::notExists('events', Q::greaterThan('payment_paid', 0));
-        $actual = $predicate->toAnsiSql($params, $table);
-        $this->assertNotNull($actual);
-    }
-}
-
-class SampleModel extends ActiveRecord\Model
-{
-    static $has_many = [
-        'events'
-    ];
 }

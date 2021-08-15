@@ -96,7 +96,7 @@ abstract class AbstractRelationship implements InterfaceRelationship
 			$this->foreign_key = is_array($this->options['foreign_key']) ? $this->options['foreign_key'] : array($this->options['foreign_key']);
 	}
 
-	protected function get_table()
+	public function get_table()
 	{
 		return Table::load($this->class_name);
 	}

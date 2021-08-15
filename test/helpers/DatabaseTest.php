@@ -9,11 +9,6 @@ class DatabaseTest extends PHPUnit\Framework\TestCase
 	public static $log = false;
 	public static $db;
 
-	public function __construct($connection_name = null)
-	{
-		$this->connection_name = $connection_name;
-	}
-
 	public function setUp(): void
 	{
 		ActiveRecord\Table::clear_cache();
