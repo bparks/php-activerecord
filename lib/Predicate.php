@@ -95,7 +95,8 @@ class JoinPredicate
         $foreign_key = Inflector::instance()->keyify($table->class->getName());
         $primary_key = $table->pk[0];
 
-        $sql = "exists (select 1 from $join_table_name where $from_table_name.$foreign_key = $join_table_name.$primary_key";
+        $not = ($this->operator == 'not exists' ? 'not ' : '');
+        $sql = $not."exists (select 1 from $join_table_name where $from_table_name.$foreign_key = $join_table_name.$primary_key";
         if ($this->predicate)
             $sql .= ' and ('.$this->predicate->toAnsiSql($params).')';
         return $sql.')';
@@ -235,6 +236,6 @@ class Q
 
     static function notExists($relationship, Predicate $predicate): JoinPredicate
     {
-        return new JoinPredicate('exists', $relationship, $predicate);
+        return new JoinPredicate('not exists', $relationship, $predicate);
     }
 }
